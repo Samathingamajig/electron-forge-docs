@@ -40,22 +40,78 @@ You should now be able to start writing and using React components in your Elect
 
 {% tabs %}
 {% tab title="src/app.tsx" %}
-```jsx
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+```tsx
+import React, { useState } from 'react';
 
-function render() {
-  ReactDOM.render(<h2>Hello from React!</h2>, document.body);
-}
+export const App: React.FC = () => {
+  const [clicks, setClicks] = useState(0);
 
-render();
+  return (
+    <>
+      <h1>Hello from React!</h1>
+      <button onClick={() => setClicks((clicks) => clicks + 1)}>Click me! {clicks}</button>
+    </>
+  );
+};
+
 ```
 {% endtab %}
 
-{% tab title="src/renderer.ts" %}
+{% tab title="src/renderer.tsx" %}
 ```typescript
-// Add this to the end of the existing file
-import './app';
+// *** Change the extension to .tsx for JSX to work ***
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { App } from './App';
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.querySelector('#root'),
+);
+
+```
+{% endtab %}
+
+{% tab title="src/index.html" %}
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+```
+{% endtab %}
+
+{% tab title="package.json" %}
+```js
+// Just make this small change, don't delete everything
+{
+  "config": {
+    "forge": {
+      "plugins": [
+        [
+          {
+            "renderer": {
+              "entryPoints": [
+                {
+                  "js": "./src/renderer.tsx", // Change this to .tsx for JSX to work
+                }
+              ]
+            }
+          }
+        ]
+      ]
+    }
+  },
+}
 ```
 {% endtab %}
 {% endtabs %}
